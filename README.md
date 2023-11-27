@@ -1,7 +1,7 @@
 # mlx_monitor
 ## Example output
 
-          Wed Nov 22 22:56:15 2023 | ubuntu@inst-fntlt-oke-rdma                                                                                                                                                                                                                         
+    Wed Nov 22 22:56:15 2023 | ubuntu@inst-fntlt-oke-rdma                                                                                                                                                                                                                         
                                                                                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                     
       Device  GPU Utilization       GPU %  MEM %                                                                                                                                                                                                                                    

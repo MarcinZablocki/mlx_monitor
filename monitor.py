@@ -270,8 +270,7 @@ def gpu_table() -> Table:
 layout = make_layout()
 layout["header"].update(Header())
 layout["main"].update(generate_table())
-if deviceCount > 0:
-    layout["gpu"].update(gpu_table())
+layout["gpu"].update(gpu_table())
     
 #layout["footer"].update(Footer())
 

@@ -10,7 +10,7 @@ from collections import OrderedDict
 from time import sleep
 
 try: 
-    import nvidia_smi
+    import pynvml as nvidia_smi
     GPUs = True
 except Exception as e: 
     print(e)
@@ -138,6 +138,7 @@ def make_layout() -> Layout:
     else: 
         layout.split(
             Layout(name="header", size=3),
+            Layout(name="gpu", size=2),
             Layout(name="main")
         )
 
@@ -241,7 +242,8 @@ def generate_table() -> Table:
             sparkline([(stats[device["mlx"]]["rx_bytes_phy"][i] - stats[device["mlx"]]["rx_bytes_phy"][i-1])//1000 for i in range(1, len(stats[device["mlx"]]["rx_bytes_phy"]))]), 
             sparkline([(stats[device["mlx"]]["tx_bytes_phy"][i] - stats[device["mlx"]]["tx_bytes_phy"][i-1])//1000 for i in range(1, len(stats[device["mlx"]]["tx_bytes_phy"]))]), 
             str(f'{(stats[device["mlx"]]["rx_bytes_phy"][-1] - stats[device["mlx"]]["rx_bytes_phy"][-2])/1000000:.2f} / {(stats[device["mlx"]]["tx_bytes_phy"][-1] - stats[device["mlx"]]["tx_bytes_phy"][-2])/1000000:.2f} Mbps'))
-            
+    if len(ibd) == 0:
+        table.add_row("No InfiniBand Devices FOUND", "N/A", "N/A", "N/A", "N/A")
     return table
 
 def gpu_table() -> Table:
@@ -253,12 +255,15 @@ def gpu_table() -> Table:
     table.add_column("GPU %", justify="left", )
     table.add_column("MEM %", justify="left", )
     for i in range(deviceCount):
-        gpu_utilization[i].append(nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).gpu)
-        mem_info = nvidia_smi.nvmlDeviceGetMemoryInfo(nvidia_smi.nvmlDeviceGetHandleByIndex(i))
+        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
+        gpu_utilization[i].append(nvidia_smi.nvmlDeviceGetUtilizationRates(handle).gpu)
+        mem_info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
         memory_utilization = mem_info.used / mem_info.total * 100
         gpu_utilization[i].pop(0)
-        table.add_row(f"GPU {i}", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{memory_utilization:.0f}%" f" ({mem_info.used // 1024**2} / {mem_info.total // 1024**2} MB)" f" (Busy: {nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%)")
-                
+        table.add_row(f"GPU {i} ({nvidia_smi.nvmlDeviceGetName(handle)})", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{memory_utilization:.0f}%" f" ({mem_info.used // 1024**2} / {mem_info.total // 1024**2} MB)" f" (Busy: {nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%)")
+    
+    if deviceCount == 0:
+        table.add_row("No GPUs FOUND", "N/A", "N/A", "N/A")
     return table
 
 layout = make_layout()

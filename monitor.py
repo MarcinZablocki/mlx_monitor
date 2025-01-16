@@ -151,10 +151,11 @@ class Header:
         grid.add_column(justify="left", ratio=1)
         grid.add_column(justify="right", ratio=1)
         text=datetime.now().ctime().replace(":", "[blink]:[/]")
-        grid.add_row(
-            text," |",
-            f" {os.getlogin()}@{platform.node()}"
-                     )
+        
+        #grid.add_row(
+        #    text," |",
+            #f" {os.getlogin()}@{platform.node()}"
+        
         
         return Panel(grid, box=box.SIMPLE)
     
@@ -177,7 +178,9 @@ def get_ib_devices():
     try: 
         p = sorted(os.listdir('/sys/class/infiniband'))
     except FileNotFoundError:
-        sys.exit("No InfiniBand devices found")
+        #sys.exit("No InfiniBand devices found")
+        ib_devices = []
+        return ib_devices
 
     for device in p:
         if 'mlx' in device:
@@ -251,8 +254,10 @@ def gpu_table() -> Table:
     table.add_column("MEM %", justify="left", )
     for i in range(deviceCount):
         gpu_utilization[i].append(nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).gpu)
+        mem_info = nvidia_smi.nvmlDeviceGetMemoryInfo(nvidia_smi.nvmlDeviceGetHandleByIndex(i))
+        memory_utilization = mem_info.used / mem_info.total * 100
         gpu_utilization[i].pop(0)
-        table.add_row(f"GPU {i}", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%")
+        table.add_row(f"GPU {i}", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{memory_utilization:.0f}%" f" ({mem_info.used // 1024**2} / {mem_info.total // 1024**2} MB)" f" (Busy: {nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%)")
                 
     return table
 

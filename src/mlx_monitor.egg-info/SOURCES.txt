@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+src/__init__.py
+src/__main__.py
+src/mlx_monitor.egg-info/PKG-INFO
+src/mlx_monitor.egg-info/SOURCES.txt
+src/mlx_monitor.egg-info/dependency_links.txt
+src/mlx_monitor.egg-info/top_level.txt

@@ -1,0 +1,21 @@
+[project]
+name = "python-mlx_monitor"
+version = "0.2.0"
+authors = [
+  { name="Marcin Zablocki", email="marcin@faster.network" },
+]
+description = "Mellanox bandwith monitoring with GPU utilization"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/MarcinZablocki/mlx_monitor/"
+Issues = "https://github.com/MarcinZablocki/mlx_monitor/issues/"
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

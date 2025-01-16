@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: mlx-monitor
+Version: 0.2.0
+Summary: Mellanox bandwith monitoring with GPU utilization
+Author-email: Marcin Zablocki <marcin@faster.network>
+Project-URL: Homepage, https://github.com/MarcinZablocki/mlx_monitor/
+Project-URL: Issues, https://github.com/MarcinZablocki/mlx_monitor/issues/
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# mlx_monitor
+## Example output
+
+          Wed Nov 22 22:56:15 2023 | ubuntu@inst-fntlt-oke-rdma                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                    
+      Device  GPU Utilization       GPU %  MEM %                                                                                                                                                                                                                                    
+     ───────────────────────────────────────────                                                                                                                                                                                                                                    
+      GPU 0   ▃▁▁▃▃▇▃▇▃▇▇▇▇▇▇▇▇▇▇▇  100%   38%                                                                                                                                                                                                                                      
+      GPU 1   ▁▂▅▇▂▇▅▇▂▇▇▇▇▇▇▇▇▇▇▇  100%   39%                                                                                                                                                                                                                                      
+      GPU 2   ▁▂▅▇▅▇▅▇▂▇▇▇▇▇▇▇▇▇▇▇  100%   39%                                                                                                                                                                                                                                      
+      GPU 3   ▅▅▇▇▇▇▇▇▇▇▁▇▇▇▇▇▇▅▇▇  100%   38%                                                                                                                                                                                                                                      
+      GPU 4   ▁▃▇▇▇▇▇▇▇▇▁▇▇▇▇▇▇▃▇▇  100%   38%                                                                                                                                                                                                                                      
+      GPU 5   ▃▃▁▁▁▃▃▇▇▇▃▇▇▇▇▇▇▇▇▇  100%   39%                                                                                                                                                                                                                                      
+      GPU 6   ▃▃▃▃▃▇▃▇▁▇▇▇▇▇▇▇▇▁▇▇  100%   38%                                                                                                                                                                                                                                      
+      GPU 7   ▃▃▇▇▇▇▇▇▇▇▁▇▇▇▇▇▇▃▇▇  100%   38%                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                    
+      Device   Net     TX                    RX                    Throughput                                                                                                                                                                                                       
+     ──────────────────────────────────────────────────────────────────────────────────────                                                                                                                                                                                         
+      mlx5_2   eth0    ▁▁▁▁▁▁▁▁▇▁▁▁▁▁▁▁▁▁▁   ▁▃▁▁▁▃▇▁▃▁▁▁▁▁▁▁▂▂▁   0.01 / 0.06 Mbps                                                                                                                                                                                                 
+      mlx5_11  eth1    ▁▁▁▁▁▁▁▁▇▁▁▁▁▁▁▁▁▁▁   ▁▁▃▁▁▁▇▁▂▁▁▁▁▁▁▁▁▁▂   0.01 / 0.12 Mbps                                                                                                                                                                                                 
+      mlx5_0   rdma0   ▁▁▁▂▂▂▃▆▆▇▅▆▇▇▆▇▇▆▇   ▁▁▁▂▂▂▃▆▆▇▅▆▇▇▆▇▇▆▇   17982.04 / 17980.52 Mbps                                                                                                                                                                                         
+      mlx5_1   rdma1   ▁▁▁▂▂▂▃▆▆▇▅▆▇▇▆▇▇▆▇   ▁▁▁▂▂▂▃▆▆▇▅▆▇▇▆▇▇▆▇   17953.25 / 17959.96 Mbps                                                                                                                                                                                         
+      mlx5_12  rdma10  ▁▁▁▂▂▂▃▆▆▇▅▆▇▆▆▇▇▆▇   ▁▁▁▂▂▂▃▆▆▇▅▆▇▆▆▇▇▆▇   18230.70 / 18272.68 Mbps                                                                                                                                                                                         
+      mlx5_13  rdma11  ▁▁▁▂▂▂▃▆▆▆▆▆▇▆▆▇▇▅▇   ▁▁▁▂▂▂▃▆▆▆▆▆▇▆▆▇▇▅▇   18986.02 / 18976.61 Mbps                                                                                                                                                                                         
+      mlx5_14  rdma12  ▁▁▁▁▂▂▃▆▆▆▅▆▇▆▆▇▆▅▇   ▁▁▁▁▂▂▃▆▆▆▅▆▇▅▆▇▆▅▇   19583.92 / 19577.85 Mbps                                                                                                                                                                                         
+      mlx5_15  rdma13  ▁▁▁▂▂▂▅▆▆▆▅▆▇▅▆▇▆▅▇   ▁▁▁▂▂▂▅▆▆▆▅▆▇▅▆▇▆▅▇   19478.10 / 19475.94 Mbps                                                                                                                                                                                         
+      mlx5_16  rdma14  ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▆▇▆▅▇   ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▆▇▆▅▇   19458.64 / 19460.83 Mbps                                                                                                                                                                                         
+      mlx5_17  rdma15  ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▆▆▆▆▇   ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▆▆▆▆▇   19686.70 / 19687.09 Mbps                                                                                                                                                                                         
+      mlx5_3   rdma2   ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▇▆▆▅▇   ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▇▆▆▅▇   19840.25 / 19861.65 Mbps                                                                                                                                                                                         
+      mlx5_4   rdma3   ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▇▆▆▅▇   ▁▁▁▂▂▂▅▅▆▆▅▆▇▅▇▆▆▅▇   19862.80 / 19876.46 Mbps                                                                                                                                                                                         
+      mlx5_5   rdma4   ▁▁▁▂▂▂▅▅▆▆▅▆▆▅▇▆▆▅▇   ▁▁▁▂▂▂▅▅▆▆▅▆▆▅▇▆▆▅▇   19816.05 / 19820.79 Mbps                                                                                                                                                                                         
+      mlx5_6   rdma5   ▁▁▁▂▂▂▆▅▆▆▅▆▆▅▇▆▆▆▇   ▁▁▁▂▂▂▆▅▆▆▅▆▆▅▇▆▆▆▇   19776.67 / 19798.86 Mbps                                                                                                                                                                                         
+      mlx5_7   rdma6   ▁▁▁▂▂▂▆▅▆▅▅▆▆▅▇▆▆▆▇   ▁▁▁▂▂▂▆▅▆▅▅▆▆▅▇▆▆▆▇   19996.12 / 20030.01 Mbps                                                                                                                                                                                         
+      mlx5_8   rdma7   ▁▁▁▂▂▂▆▅▆▅▆▆▆▅▇▆▅▆▇   ▁▁▁▂▂▂▆▅▆▅▆▆▆▅▇▆▅▆▇   19759.89 / 19773.83 Mbps                                                                                                                                                                                         
+      mlx5_9   rdma8   ▁▁▂▂▂▂▆▅▆▅▆▆▆▅▆▆▅▇▇   ▁▁▂▂▂▂▆▅▆▅▆▆▆▅▆▆▅▇▇   19791.17 / 19791.32 Mbps                                                                                                                                                                                         
+      mlx5_10  rdma9   ▁▁▁▂▂▂▃▆▆▇▅▆▇▇▆▇▇▆▇   ▁▁▁▂▂▂▃▆▆▇▅▆▇▇▆▇▇▆▇   18015.13 / 18040.56 Mbps
+

@@ -138,7 +138,7 @@ def make_layout() -> Layout:
     else: 
         layout.split(
             Layout(name="header", size=3),
-            Layout(name="gpu", size=2),
+            Layout(name="gpu", size=4),
             Layout(name="main")
         )
 
@@ -264,6 +264,7 @@ def gpu_table() -> Table:
     
     if deviceCount == 0:
         table.add_row("No GPUs FOUND", "N/A", "N/A", "N/A")
+        
     return table
 
 layout = make_layout()

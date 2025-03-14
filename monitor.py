@@ -9,13 +9,13 @@ import array
 from collections import OrderedDict
 from time import sleep
 
-try:
+try: 
     import pynvml as nvidia_smi
     GPUs = True
-except Exception as e:
+except Exception as e: 
     print(e)
     GPUs = False
-
+     
 from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
@@ -33,14 +33,14 @@ ETHTOOL_GSTATS = 0x0000001d
 ETH_SS_STATS = 0x1
 ETH_GSTRING_LEN = 32
 
-if GPUs:
-    try:
+if GPUs: 
+    try: 
         nvidia_smi.nvmlInit()
-    except:
+    except: 
         GPUs = False
-
+        
 if GPUs:
-
+        
     gpu_utilization = {}
     memory_utilization = {}
     deviceCount = nvidia_smi.nvmlDeviceGetCount()
@@ -48,10 +48,10 @@ if GPUs:
     for d in range(deviceCount):
         gpu_utilization[d] = [0] * 20
         memory_utilization[d] = [0] * 20
-
-else:
+        
+else: 
     deviceCount = 0
-
+    
 class Ethtool(object):
     """
     A class for interacting with the ethtool API to retrieve network interface card (NIC) statistics.
@@ -135,7 +135,7 @@ def make_layout() -> Layout:
             Layout(name="gpu", size=11),
             Layout(name="main", ratio=1),
         )
-    else:
+    else: 
         layout.split(
             Layout(name="header", size=3),
             Layout(name="gpu", size=4),
@@ -152,16 +152,16 @@ class Header:
         grid.add_column(justify="left", ratio=1)
         grid.add_column(justify="right", ratio=1)
         text=datetime.now().ctime().replace(":", "[blink]:[/]")
-
+        
         #grid.add_row(
         #    text," |",
             #f" {os.getlogin()}@{platform.node()}"
-
-
+        
+        
         return Panel(grid, box=box.SIMPLE)
-
+    
 class Footer:
-
+    
 
     def __rich__(self) -> Panel:
         grid = Table.grid(expand=True)
@@ -176,7 +176,7 @@ class Footer:
 # find infiniBand devices
 def get_ib_devices():
     ib_devices = []
-    try:
+    try: 
         p = sorted(os.listdir('/sys/class/infiniband'))
     except FileNotFoundError:
         #sys.exit("No InfiniBand devices found")
@@ -206,16 +206,16 @@ stats = {}
 for device in ibd:
     # initialize stats
     d = Ethtool(device["net"])
-    ethtool_data = {k: v for k, v in d.get_nic_stats()}
+    ethtool_data = {k: v for k, v in d.get_nic_stats()}  
     stats[device["mlx"]] = {}
     stats[device["mlx"]]["rx_bytes_phy"] = [ethtool_data["rx_bytes_phy"]] * 20
     stats[device["mlx"]]["tx_bytes_phy"] = [ethtool_data["tx_bytes_phy"]] * 20
-
+    
 def update_stats():
-    for device in ibd:
+    for device in ibd: 
         d = Ethtool(device["net"])
         ethtool_data = {k: v for k, v in d.get_nic_stats()}
-
+        
         stats[device["mlx"]]["rx_bytes_phy"].append(ethtool_data["rx_bytes_phy"])
         stats[device["mlx"]]["tx_bytes_phy"].append(ethtool_data["tx_bytes_phy"])
         stats[device["mlx"]]["rx_bytes_phy"].pop(0)
@@ -224,23 +224,23 @@ def update_stats():
 
 def generate_table() -> Table:
     # Generate rich table
-
+    
     stats = update_stats()
-
+    
     table = Table(expand=False, box=box.SIMPLE_HEAD, padding=(0,0,0,1))
     table.add_column("Device", justify="left", style="dark_orange", no_wrap=True)
     table.add_column("Net", justify="left", style="dark_orange", no_wrap=True)
     table.add_column("TX", justify="left", min_width=20, max_width=22)
     table.add_column("RX", justify="left", min_width=20, max_width=22)
     table.add_column("Throughput", justify="left", min_width=3)
-
+    
     # TODO: Fix the list comprehension to be more understandable
-
+    
     for device in sorted(ibd, key=lambda x: x["net"]):
         table.add_row(
-            device["mlx"], device["net"],
-            sparkline([(stats[device["mlx"]]["rx_bytes_phy"][i] - stats[device["mlx"]]["rx_bytes_phy"][i-1])//1000 for i in range(1, len(stats[device["mlx"]]["rx_bytes_phy"]))]),
-            sparkline([(stats[device["mlx"]]["tx_bytes_phy"][i] - stats[device["mlx"]]["tx_bytes_phy"][i-1])//1000 for i in range(1, len(stats[device["mlx"]]["tx_bytes_phy"]))]),
+            device["mlx"], device["net"], 
+            sparkline([(stats[device["mlx"]]["rx_bytes_phy"][i] - stats[device["mlx"]]["rx_bytes_phy"][i-1])//1000 for i in range(1, len(stats[device["mlx"]]["rx_bytes_phy"]))]), 
+            sparkline([(stats[device["mlx"]]["tx_bytes_phy"][i] - stats[device["mlx"]]["tx_bytes_phy"][i-1])//1000 for i in range(1, len(stats[device["mlx"]]["tx_bytes_phy"]))]), 
             str(f'{(stats[device["mlx"]]["rx_bytes_phy"][-1] - stats[device["mlx"]]["rx_bytes_phy"][-2])/1000000:.2f} / {(stats[device["mlx"]]["tx_bytes_phy"][-1] - stats[device["mlx"]]["tx_bytes_phy"][-2])/1000000:.2f} Mbps'))
     if len(ibd) == 0:
         table.add_row("No InfiniBand Devices FOUND", "N/A", "N/A", "N/A", "N/A")
@@ -248,7 +248,7 @@ def generate_table() -> Table:
 
 def gpu_table() -> Table:
     # Generate rich table
-
+    
     table = Table(expand=False, box=box.SIMPLE_HEAD, padding=(0,0,0,1))
     table.add_column("Device", justify="left", style="dark_orange", no_wrap=True)
     table.add_column("GPU Utilization", justify="left", )
@@ -263,23 +263,25 @@ def gpu_table() -> Table:
         power_management_limit=int(nvidia_smi.nvmlDeviceGetPowerManagementLimit(nvidia_smi.nvmlDeviceGetHandleByIndex(i))/1000)
         power_usage=int(nvidia_smi.nvmlDeviceGetPowerUsage(nvidia_smi.nvmlDeviceGetHandleByIndex(i))/1000)
         table.add_row(f"GPU {i} ({nvidia_smi.nvmlDeviceGetName(handle)})", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{memory_utilization:.0f}%" f" ({mem_info.used // 1024**2} / {mem_info.total // 1024**2} MB)" f" (Busy: {nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%)"  f" (Temp: {nvidia_smi.nvmlDeviceGetTemperature(nvidia_smi.nvmlDeviceGetHandleByIndex(i), nvidia_smi.NVML_TEMPERATURE_GPU)}C)" f" (Power: {power_usage}W / {power_management_limit}W)" )
-
+    
     if deviceCount == 0:
         table.add_row("No GPUs FOUND", "N/A", "N/A", "N/A")
-
+        
     return table
 
 layout = make_layout()
 layout["header"].update(Header())
 layout["main"].update(generate_table())
 layout["gpu"].update(gpu_table())
-
+    
 #layout["footer"].update(Footer())
 
-with Live(layout, refresh_per_second=10, screen=True):
+with Live(layout, refresh_per_second=10, screen=True): 
     while True:
         layout["main"].update(generate_table())
         if deviceCount > 0:
             layout["gpu"].update(gpu_table())
         sleep(0.1)
-        
+
+
+

@@ -260,7 +260,9 @@ def gpu_table() -> Table:
         mem_info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
         memory_utilization = mem_info.used / mem_info.total * 100
         gpu_utilization[i].pop(0)
-        table.add_row(f"GPU {i} ({nvidia_smi.nvmlDeviceGetName(handle)})", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{memory_utilization:.0f}%" f" ({mem_info.used // 1024**2} / {mem_info.total // 1024**2} MB)" f" (Busy: {nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%)")
+        power_management_limit=int(nvidia_smi.nvmlDeviceGetPowerManagementLimit(nvidia_smi.nvmlDeviceGetHandleByIndex(i))/1000)
+        power_usage=int(nvidia_smi.nvmlDeviceGetPowerUsage(nvidia_smi.nvmlDeviceGetHandleByIndex(i))/1000)
+        table.add_row(f"GPU {i} ({nvidia_smi.nvmlDeviceGetName(handle)})", sparkline(gpu_utilization[i]), f"{gpu_utilization[i][-1]}%", f"{memory_utilization:.0f}%" f" ({mem_info.used // 1024**2} / {mem_info.total // 1024**2} MB)" f" (Busy: {nvidia_smi.nvmlDeviceGetUtilizationRates(nvidia_smi.nvmlDeviceGetHandleByIndex(i)).memory}%)"  f" (Temp: {nvidia_smi.nvmlDeviceGetTemperature(nvidia_smi.nvmlDeviceGetHandleByIndex(i), nvidia_smi.NVML_TEMPERATURE_GPU)}C)" f" (Power: {power_usage}W / {power_management_limit}W)" )
     
     if deviceCount == 0:
         table.add_row("No GPUs FOUND", "N/A", "N/A", "N/A")
